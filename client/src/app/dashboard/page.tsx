@@ -2,19 +2,67 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { api } from '@/lib/api';
+
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  createdByName: string;
+  createdAt: string;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>([]);
+  
+  // New Project Form State
+  const [isCreating, setIsCreating] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
+  const [newProjectDesc, setNewProjectDesc] = useState('');
+  const [createError, setCreateError] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/auth/login');
-    } else {
+      return;
+    }
+    
+    fetchProjects();
+  }, [router]);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await api.get('/projects');
+      setProjects(res.data);
+    } catch (error: any) {
+      console.error("Failed to fetch projects", error);
+      // If token expired or unauthorized
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        localStorage.removeItem('token');
+        router.push('/auth/login');
+      }
+    } finally {
       setLoading(false);
     }
-  }, [router]);
+  };
+
+  const handleCreateProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreateError('');
+    try {
+      await api.post('/projects', { name: newProjectName, description: newProjectDesc });
+      setIsCreating(false);
+      setNewProjectName('');
+      setNewProjectDesc('');
+      fetchProjects(); // Refresh the list
+    } catch (err: any) {
+      setCreateError(err.response?.data?.message || 'Failed to create project');
+    }
+  };
 
   if (loading) {
     return (
@@ -40,48 +88,93 @@ export default function DashboardPage() {
           </button>
         </header>
         
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2">Dashboard</h2>
-          <p className="text-slate-400">Welcome to your team's knowledge hub.</p>
+        <div className="mb-8 flex justify-between items-end">
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-2">Projects</h2>
+            <p className="text-slate-400">Manage your team's projects and documentation.</p>
+          </div>
+          <button 
+            onClick={() => setIsCreating(!isCreating)}
+            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+          >
+            {isCreating ? 'Cancel' : '+ New Project'}
+          </button>
         </div>
+
+        {isCreating && (
+          <div className="mb-8 p-6 bg-slate-900/80 border border-slate-700 rounded-2xl shadow-xl backdrop-blur-sm">
+            <h3 className="text-xl font-semibold text-white mb-4">Create New Project</h3>
+            <form onSubmit={handleCreateProject} className="space-y-4 max-w-xl">
+              {createError && (
+                <div className="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">
+                  {createError}
+                </div>
+              )}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1" htmlFor="name">Project Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1" htmlFor="desc">Description</label>
+                <textarea
+                  id="desc"
+                  rows={3}
+                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  value={newProjectDesc}
+                  onChange={(e) => setNewProjectDesc(e.target.value)}
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-all"
+              >
+                Create
+              </button>
+            </form>
+          </div>
+        )}
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-xl transition-transform hover:-translate-y-1 hover:border-slate-700">
-            <div className="h-10 w-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-4">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        {projects.length === 0 && !isCreating ? (
+          <div className="text-center py-20 bg-slate-900/30 rounded-2xl border border-slate-800 border-dashed">
+            <div className="h-12 w-12 rounded-full bg-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-400">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Projects</h3>
-            <p className="text-slate-400 mb-4 text-sm">Manage your team's projects and documentation in one place.</p>
-            <button className="text-indigo-400 hover:text-indigo-300 font-medium text-sm flex items-center gap-1 group">
-              View Projects 
-              <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+            <h3 className="text-lg font-medium text-white mb-2">No projects yet</h3>
+            <p className="text-slate-400 mb-6">Get started by creating a new project for your team.</p>
+            <button 
+              onClick={() => setIsCreating(true)}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-colors border border-slate-700"
+            >
+              Create Project
             </button>
           </div>
-          
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-xl transition-transform hover:-translate-y-1 hover:border-slate-700">
-            <div className="h-10 w-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Team Members</h3>
-            <p className="text-slate-400 mb-4 text-sm">Invite colleagues and manage access levels for your team.</p>
-            <button className="text-purple-400 hover:text-purple-300 font-medium text-sm flex items-center gap-1 group">
-              Manage Team 
-              <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-            </button>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project) => (
+              <Link href={`/dashboard/projects/${project.id}`} key={project.id}>
+                <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-xl transition-transform hover:-translate-y-1 hover:border-indigo-500/50 group flex flex-col h-full cursor-pointer">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors">{project.name}</h3>
+                    <p className="text-slate-400 mb-6 text-sm line-clamp-3">
+                      {project.description || "No description provided."}
+                    </p>
+                  </div>
+                  <div className="mt-auto pt-4 border-t border-slate-800/50 flex justify-between items-center text-xs text-slate-500">
+                    <span>Created by {project.createdByName}</span>
+                    <span>{new Date(project.createdAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-          
-          <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-xl transition-transform hover:-translate-y-1 hover:border-slate-700">
-            <div className="h-10 w-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2">Settings</h3>
-            <p className="text-slate-400 mb-4 text-sm">Configure your workspace preferences and personal profile.</p>
-            <button className="text-emerald-400 hover:text-emerald-300 font-medium text-sm flex items-center gap-1 group">
-              Workspace Settings 
-              <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
