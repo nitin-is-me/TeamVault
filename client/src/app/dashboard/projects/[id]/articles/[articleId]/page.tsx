@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Article {
   id: number;
@@ -83,11 +85,10 @@ export default function ArticleViewer() {
           </div>
         </header>
 
-        <article className="prose prose-invert prose-indigo max-w-none">
-           {/* Note: In V2 we will use react-markdown here. For now, preserving whitespace. */}
-           <div className="whitespace-pre-wrap font-mono text-slate-300 leading-relaxed p-6 bg-slate-900/50 rounded-xl border border-slate-800 shadow-inner">
+        <article className="prose prose-invert prose-indigo max-w-none prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800 p-6 bg-slate-900/30 rounded-xl border border-slate-800 shadow-inner">
+           <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {article.content}
-           </div>
+           </ReactMarkdown>
         </article>
       </div>
     </div>

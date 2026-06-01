@@ -150,7 +150,7 @@ export default function ProjectWorkspace() {
                 <textarea
                   required
                   rows={8}
-                  placeholder="Write your documentation here..."
+                  placeholder="Write your documentation here... (Markdown is supported! You can use **bold**, # headings, - lists, and \`code\` blocks)"
                   className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm"
                   value={newContent}
                   onChange={(e) => setNewContent(e.target.value)}
