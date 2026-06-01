@@ -4,7 +4,7 @@ so this is why i started this project... during my software engineering internsh
 
 all this knowledge was scattered across random slack threads, messy google docs or comments in code, and individual people's brains. I actually had to write a huge doc for the next intern before I left, and it made me realize how much valuable knowledge just disappears when people leave or move projects.
 
-so I thought, why not build a focused, simple knowledge sharing platform for small teams? not a massive bloated thing, just a lightweight and clean place to save project docs.
+so I thought, why not build a focused, simple knowledge sharing platform for small teams? not a massive bloated thing, just a lightweight and clean place to save project docs so that it actually helps the next guy and we can just invite them to the project. It'll be also helpful for solo projects where you just want a separate space for your projects and all documentations linked to it so you don't have to upload a .md file everytime you update your project.
 
 ### Goal
 to build a simple, focused knowledge-sharing hub for small teams where you can actually find the documentation you need without struggling for random flows and info. also using this to properly learn Spring Boot!
