@@ -32,7 +32,7 @@ public class SecurityConfig {
             .cors(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/", "/api/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -47,7 +47,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        
+        // Allow localhost for dev, and allow the frontend domain from env vars for production
+        String allowedOrigin = System.getenv("CORS_ALLOWED_ORIGIN");
+        if (allowedOrigin != null && !allowedOrigin.isEmpty()) {
+            configuration.setAllowedOrigins(List.of("http://localhost:3000", allowedOrigin));
+        } else {
+            configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        }
+        
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
