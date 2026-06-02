@@ -21,6 +21,10 @@ public class ArticleService {
 
     public ArticleResponse createArticle(Long projectId, ArticleRequest request, User currentUser) {
         Project project = projectService.getProjectIfAccessible(projectId, currentUser);
+        String role = projectService.getRoleForProject(project, currentUser);
+        if ("VIEWER".equals(role)) {
+            throw new RuntimeException("You do not have permission to create articles in this project");
+        }
 
         Article article = Article.builder()
                 .title(request.getTitle())
@@ -51,11 +55,11 @@ public class ArticleService {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
-        projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        String role = projectService.getRoleForProject(project, currentUser);
         
-        // MVP: Ensure only author or project owner can edit? We'll just check author for simplicity
-        if (!article.getAuthor().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("You do not have permission to edit this article");
+        if ("VIEWER".equals(role)) {
+            throw new RuntimeException("You do not have permission to edit articles in this project");
         }
 
         article.setTitle(request.getTitle());
@@ -69,10 +73,11 @@ public class ArticleService {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
-        projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        String role = projectService.getRoleForProject(project, currentUser);
 
-        if (!article.getAuthor().getId().equals(currentUser.getId())) {
-            throw new RuntimeException("You do not have permission to delete this article");
+        if ("VIEWER".equals(role)) {
+            throw new RuntimeException("You do not have permission to delete articles in this project");
         }
 
         articleRepository.delete(article);

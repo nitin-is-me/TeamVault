@@ -32,18 +32,18 @@ public class ProjectService {
                 .build();
 
         Project savedProject = projectRepository.save(project);
-        return mapToResponse(savedProject);
+        return mapToResponse(savedProject, currentUser);
     }
 
     public List<ProjectResponse> getAllProjects(User currentUser) {
         return projectRepository.findAllAccessibleProjects(currentUser).stream()
-                .map(this::mapToResponse)
+                .map(project -> mapToResponse(project, currentUser))
                 .collect(Collectors.toList());
     }
 
     public ProjectResponse getProjectById(Long id, User currentUser) {
         Project project = getProjectIfAccessible(id, currentUser);
-        return mapToResponse(project);
+        return mapToResponse(project, currentUser);
     }
 
     // --- Membership Management ---
@@ -113,7 +113,18 @@ public class ProjectService {
         return project;
     }
 
-    private ProjectResponse mapToResponse(Project project) {
+    public String getRoleForProject(Project project, User currentUser) {
+        if (currentUser == null) return "VIEWER";
+        if (project.getCreatedBy().getId().equals(currentUser.getId())) return "OWNER";
+        
+        return projectMemberRepository.findByProjectIdAndUserId(project.getId(), currentUser.getId())
+                .map(m -> m.getRole().name())
+                .orElse("VIEWER");
+    }
+
+    private ProjectResponse mapToResponse(Project project, User currentUser) {
+        String role = getRoleForProject(project, currentUser);
+
         return ProjectResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
@@ -121,6 +132,7 @@ public class ProjectService {
                 .createdById(project.getCreatedBy().getId())
                 .createdByName(project.getCreatedBy().getName())
                 .createdAt(project.getCreatedAt())
+                .currentUserRole(role)
                 .build();
     }
 

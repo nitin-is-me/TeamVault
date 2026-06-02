@@ -24,6 +24,7 @@ export default function ArticleViewer() {
 
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState<Article | null>(null);
+  const [project, setProject] = useState<any>(null);
 
   // Edit State
   const [isEditing, setIsEditing] = useState(false);
@@ -47,8 +48,12 @@ export default function ArticleViewer() {
 
   const fetchArticle = async () => {
     try {
-      const res = await api.get(`/articles/${articleId}`);
-      setArticle(res.data);
+      const [artRes, projRes] = await Promise.all([
+        api.get(`/articles/${articleId}`),
+        api.get(`/projects/${projectId}`)
+      ]);
+      setArticle(artRes.data);
+      setProject(projRes.data);
     } catch (error: any) {
       console.error("Failed to fetch article", error);
       if (error.response?.status === 401 || error.response?.status === 403) {
@@ -105,17 +110,19 @@ export default function ArticleViewer() {
             <Link href={`/dashboard/projects/${projectId}`} className="text-slate-500 hover:text-indigo-400 transition-colors inline-flex items-center gap-2 text-sm font-medium">
                &larr; Back to Project
             </Link>
-            <button 
-              onClick={toggleEdit}
-              className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-colors border border-slate-700 flex items-center gap-2"
-            >
-              {isEditing ? 'Cancel Editing' : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                  Edit Article
-                </>
-              )}
-            </button>
+            {project?.currentUserRole !== 'VIEWER' && (
+              <button 
+                onClick={toggleEdit}
+                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-colors border border-slate-700 flex items-center gap-2"
+              >
+                {isEditing ? 'Cancel Editing' : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    Edit Article
+                  </>
+                )}
+              </button>
+            )}
           </div>
           
           {!isEditing && (

@@ -24,7 +24,7 @@ You can create separate projects (like "Backend Refactor" or "Frontend Configs")
 You can write knowledge articles inside your projects. The coolest part? It supports full Markdown with preview! So you can write bold text, headings, lists, and even code blocks to make your docs look professional and actually readable. Plus, you can easily edit articles later if you make a typo.
 
 ### Team Collaboration & RBAC
-The biggest update! You can now invite team members to your projects using just their email address. It has real Role Based Access Control (RBAC) built into the Spring Boot backend, which means you can decide if the invited user can edit the project articles or not. Your dashboard automatically shows projects you created alongside projects you were invited to.
+The biggest update! You can now invite team members to your projects using just their email address. It has real Role Based Access Control (RBAC) built into the Spring Boot backend, which means you can decide if the invited user can edit the project articles or not. Only the project owner can invite other users to the project. Your dashboard automatically shows projects you created alongside projects you were invited to.
 
 ### Scalable and strong database
 I used Spring Boot with PostgreSQL. I could have just built a messy backend, but using Spring Boot ensures the application is actually scalable and follows proper architectural patterns, which is exactly what I wanted to learn lol.

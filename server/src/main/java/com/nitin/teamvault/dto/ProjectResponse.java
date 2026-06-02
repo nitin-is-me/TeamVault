@@ -18,4 +18,5 @@ public class ProjectResponse {
     private Long createdById;
     private String createdByName;
     private LocalDateTime createdAt;
+    private String currentUserRole;
 }
