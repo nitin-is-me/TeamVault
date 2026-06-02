@@ -36,7 +36,7 @@ The frontend is built with Next.js and Tailwind CSS. I added a premium dark mode
 | Version | Date       | Summary         |
 |---------|------------|-----------------|
 |1.0      | **01-Jun-2026** | First push. The project acts like a clean personal documentation saver. Basic features like authentication (JWT), project creation, and markdown article writing are added. |
-|1.1      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality so you don't have to delete an article just to fix a typo. |
+|1.1      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality and a unified omnibar to search globally across all your projects. |
 
 --------------
 ### Contribute to the project
