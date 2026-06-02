@@ -6,7 +6,6 @@ import com.nitin.teamvault.entity.Article;
 import com.nitin.teamvault.entity.Project;
 import com.nitin.teamvault.entity.User;
 import com.nitin.teamvault.repository.ArticleRepository;
-import com.nitin.teamvault.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,10 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
 
     public ArticleResponse createArticle(Long projectId, ArticleRequest request, User currentUser) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+        Project project = projectService.getProjectIfAccessible(projectId, currentUser);
 
         Article article = Article.builder()
                 .title(request.getTitle())
@@ -35,15 +33,17 @@ public class ArticleService {
         return mapToResponse(savedArticle);
     }
 
-    public List<ArticleResponse> getArticlesByProject(Long projectId) {
+    public List<ArticleResponse> getArticlesByProject(Long projectId, User currentUser) {
+        projectService.getProjectIfAccessible(projectId, currentUser); // verify access
         return articleRepository.findByProjectId(projectId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
-    public ArticleResponse getArticleById(Long id) {
+    public ArticleResponse getArticleById(Long id, User currentUser) {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+        projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
         return mapToResponse(article);
     }
 
@@ -51,7 +51,9 @@ public class ArticleService {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
-        // Verify the user owns the article before updating
+        projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        
+        // MVP: Ensure only author or project owner can edit? We'll just check author for simplicity
         if (!article.getAuthor().getId().equals(currentUser.getId())) {
             throw new RuntimeException("You do not have permission to edit this article");
         }
@@ -67,7 +69,8 @@ public class ArticleService {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
 
-        // Verify the user owns the article before deleting
+        projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+
         if (!article.getAuthor().getId().equals(currentUser.getId())) {
             throw new RuntimeException("You do not have permission to delete this article");
         }

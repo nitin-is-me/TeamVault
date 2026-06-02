@@ -32,14 +32,20 @@ public class ArticleController {
 
     // Get all articles for a project
     @GetMapping("/projects/{projectId}/articles")
-    public ResponseEntity<List<ArticleResponse>> getArticlesByProject(@PathVariable Long projectId) {
-        return ResponseEntity.ok(articleService.getArticlesByProject(projectId));
+    public ResponseEntity<List<ArticleResponse>> getArticlesByProject(
+            @PathVariable Long projectId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(articleService.getArticlesByProject(projectId, currentUser));
     }
 
     // Get a specific article by its ID
     @GetMapping("/articles/{id}")
-    public ResponseEntity<ArticleResponse> getArticleById(@PathVariable Long id) {
-        return ResponseEntity.ok(articleService.getArticleById(id));
+    public ResponseEntity<ArticleResponse> getArticleById(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(articleService.getArticleById(id, currentUser));
     }
 
     // Update an article

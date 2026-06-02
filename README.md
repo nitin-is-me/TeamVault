@@ -19,7 +19,10 @@ You don't need to verify an email or anything complicated. Just enter your name,
 You can create separate projects (like "Backend Refactor" or "Frontend Configs"). Since everything is secured with JWT authentication, random people can't see your stuff unless they log in.
 
 ### Write documentation without hassle
-You can write knowledge articles inside your projects. The coolest part? It supports full Markdown! So you can write bold text, headings, lists, and even code blocks to make your docs look professional and actually readable.
+You can write knowledge articles inside your projects. The coolest part? It supports full Markdown! So you can write bold text, headings, lists, and even code blocks to make your docs look professional and actually readable. Plus, you can easily edit articles later if you make a typo.
+
+### Team Collaboration & RBAC
+The biggest update! You can now invite team members to your projects using just their email address. It has real Role Based Access Control (RBAC) built into the Spring Boot backend, which means you can decide if the invited user can edit the project articles or not. Your dashboard automatically shows projects you created alongside projects you were invited to.
 
 ### Scalable and strong database
 I used Spring Boot with PostgreSQL. I could have just built a messy backend, but using Spring Boot ensures the application is actually scalable and follows proper architectural patterns, which is exactly what I wanted to learn lol.
@@ -31,6 +34,7 @@ The frontend is built with Next.js and Tailwind CSS. I added a premium dark mode
 | Version | Date       | Summary         |
 |---------|------------|-----------------|
 |1.0      | **01-Jun-2026** | First push. The project acts like a clean personal documentation saver. Basic features like authentication (JWT), project creation, and markdown article writing are added. |
+|1.1      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality so you don't have to delete an article just to fix a typo. |
 
 --------------
 ### Contribute to the project
