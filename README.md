@@ -1,3 +1,5 @@
+<img width="926" height="300" alt="image" src="https://github.com/user-attachments/assets/60a976d7-a007-4c8e-8c19-2a9534c35f63" />
+
 # TeamVault
 
 so this is why i started this project... during my software engineering internships, i noticed that whenever a new guy joins the team or takes over a project, they spend like 90% of their time just trying to find setup instructions, random database credentials, or figuring out why something keeps crashing lol. 
