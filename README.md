@@ -38,7 +38,7 @@ The frontend is built with Next.js and Tailwind CSS. I added a premium dark mode
 ### For Nerds (Architecture & Deployment)
 I wanted this project to reflect modern industry standards, so the deployment pipeline is completely automated:
 - **Backend Stack:** Java 21, Spring Boot 3, Spring Security (JWT), PostgreSQL (Supabase).
-- **Frontend Stack:** Next.js (App Router), React, Tailwind CSS, Axios.
+- **Frontend Stack:** Next.js (App Router) + TypeScript, React, Tailwind CSS, Axios.
 - **Dockerized Environment:** The Spring Boot backend is containerized using a highly optimized, multi-stage `Dockerfile`. It builds a lightweight Eclipse Temurin JRE image, keeping the final container incredibly small.
 - **CI/CD Pipeline:** Configured with **GitHub Actions**. Every push to the `master` branch automatically triggers a workflow that checks out the code, builds the Docker image, and pushes it to Docker Hub.
 - **Cloud Hosting:** 
