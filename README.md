@@ -15,7 +15,7 @@ to build a simple, focused knowledge-sharing hub for small teams where you can a
 
 ## Features
 ### Account creation
-You don't need to verify an email or anything complicated. Just enter your name, email, and password to create an account and you're in. 
+You don't need to verify an email (yet) or anything complicated. Just enter your name, email, and password to create an account and you're in. 
 
 ### Secure Projects
 You can create separate projects (like "Backend Refactor" or "Frontend Configs"). Since everything is secured with JWT authentication, random people can't see your stuff unless they log in.

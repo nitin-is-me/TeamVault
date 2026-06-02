@@ -76,10 +76,10 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-slate-950 text-slate-200 p-8">
       <div className="max-w-6xl mx-auto">
         <header className="flex justify-between items-center mb-12">
-          <div className="flex items-center gap-3">
-             <div className="h-8 w-8 rounded bg-gradient-to-br from-indigo-500 to-purple-500 shadow-lg"></div>
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+             <img src="/favicon.ico" alt="Logo" className="w-8 h-8 rounded shadow-lg" />
              <h1 className="text-2xl font-bold text-white tracking-tight">TeamVault</h1>
-          </div>
+          </Link>
           <div className="flex items-center gap-4">
              <button
                onClick={() => window.dispatchEvent(new Event('open-search'))}
