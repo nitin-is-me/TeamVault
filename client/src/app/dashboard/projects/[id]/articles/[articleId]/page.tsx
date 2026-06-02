@@ -29,6 +29,7 @@ export default function ArticleViewer() {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
+  const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -155,15 +156,44 @@ export default function ArticleViewer() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1" htmlFor="content">Content (Markdown supported)</label>
-                <textarea
-                  id="content"
-                  required
-                  rows={15}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm leading-relaxed"
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                />
+                <div className="flex items-center gap-4 mb-2">
+                  <label className="block text-sm font-medium text-slate-300">Content</label>
+                  <div className="flex items-center bg-slate-800 rounded-lg p-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('write')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'write' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                    >
+                      Write
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('preview')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'preview' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                </div>
+                
+                {activeTab === 'write' ? (
+                  <textarea
+                    id="content"
+                    required
+                    rows={15}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm leading-relaxed"
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                  />
+                ) : (
+                  <div className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 min-h-[350px] max-h-[500px] overflow-y-auto">
+                    <article className="prose prose-invert prose-indigo max-w-none prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700">
+                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {editContent || '*Nothing to preview*'}
+                       </ReactMarkdown>
+                    </article>
+                  </div>
+                )}
               </div>
               <div className="flex justify-end gap-3 pt-2">
                  <button

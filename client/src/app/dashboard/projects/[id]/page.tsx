@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 import TeamManager from '@/components/TeamManager';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Article {
   id: number;
@@ -34,6 +36,7 @@ export default function ProjectWorkspace() {
   const [isCreating, setIsCreating] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
+  const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write');
   const [createError, setCreateError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showTeamManager, setShowTeamManager] = useState(false);
@@ -166,14 +169,44 @@ export default function ProjectWorkspace() {
                 />
               </div>
               <div>
-                <textarea
-                  required
-                  rows={8}
-                  placeholder="Write your documentation here... (Markdown is supported! You can use **bold**, # headings, - lists, and \`code\` blocks)"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm"
-                  value={newContent}
-                  onChange={(e) => setNewContent(e.target.value)}
-                />
+                <div className="flex items-center gap-4 mb-2">
+                  <label className="block text-sm font-medium text-slate-300">Content</label>
+                  <div className="flex items-center bg-slate-800 rounded-lg p-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('write')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'write' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                    >
+                      Write
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('preview')}
+                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'preview' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                </div>
+                
+                {activeTab === 'write' ? (
+                  <textarea
+                    id="content"
+                    required
+                    rows={8}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm leading-relaxed"
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
+                  />
+                ) : (
+                  <div className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 min-h-[200px] max-h-[400px] overflow-y-auto">
+                    <article className="prose prose-invert prose-indigo max-w-none prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700">
+                       <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {newContent || '*Nothing to preview*'}
+                       </ReactMarkdown>
+                    </article>
+                  </div>
+                )}
               </div>
               <div className="flex justify-end gap-3">
                  <button
