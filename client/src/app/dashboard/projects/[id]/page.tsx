@@ -114,6 +114,14 @@ export default function ProjectWorkspace() {
                <p className="text-sm text-slate-400 line-clamp-1 max-w-md">{project.description}</p>
              </div>
           </div>
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-search'))}
+            className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <span className="hidden sm:inline">Search</span>
+            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-xs text-slate-500 bg-slate-800 rounded">⌘K</kbd>
+          </button>
         </header>
         
         <div className="mb-8 flex justify-between items-end border-b border-slate-800 pb-4">

@@ -80,12 +80,22 @@ export default function DashboardPage() {
              <div className="h-8 w-8 rounded bg-gradient-to-br from-indigo-500 to-purple-500 shadow-lg"></div>
              <h1 className="text-2xl font-bold text-white tracking-tight">TeamVault</h1>
           </div>
-          <button 
-            onClick={() => { localStorage.removeItem('token'); router.push('/'); }}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm font-medium transition-colors border border-slate-700 hover:border-slate-600"
-          >
-            Sign Out
-          </button>
+          <div className="flex items-center gap-4">
+             <button
+               onClick={() => window.dispatchEvent(new Event('open-search'))}
+               className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg"
+             >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <span>Search</span>
+                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-xs text-slate-500 bg-slate-800 rounded">⌘K</kbd>
+             </button>
+             <button 
+               onClick={() => { localStorage.removeItem('token'); router.push('/'); }}
+               className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm font-medium transition-colors border border-slate-700 hover:border-slate-600"
+             >
+               Sign Out
+             </button>
+          </div>
         </header>
         
         <div className="mb-8 flex justify-between items-end">
