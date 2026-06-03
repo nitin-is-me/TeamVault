@@ -164,77 +164,8 @@ pm.user
 
 This transformation is the entire purpose of an ORM.
 
----
-
-# Why JPQL Looks Weird
-
-JPQL is NOT SQL.
-
-JPQL works with Java objects.
-
-SQL works with tables.
-
----
-
-JPQL:
-
-```java
-SELECT pm.project
-FROM ProjectMember pm
-```
-
-looks at:
-
-```java
-private Project project;
-```
-
-inside the entity.
-
----
-
-SQL would be closer to:
-
-```sql
-SELECT p.*
-FROM project_members pm
-JOIN projects p
-ON pm.project_id = p.id
-```
-
-JPQL lets us think in objects instead of joins.
-
----
-
-# Hibernate Is Writing SQL For Me
-
-When I write:
-
-```java
-SELECT pm.project
-FROM ProjectMember pm
-WHERE pm.user = :user
-```
-
-Hibernate might generate something similar to:
-
-```sql
-SELECT p.*
-FROM project_members pm
-JOIN projects p
-ON pm.project_id = p.id
-WHERE pm.user_id = ?
-```
-
-The exact SQL may differ.
-
-But conceptually this is what happens.
-
-The JOIN still exists.
-
-Hibernate is simply generating it for me.
-
----
+> [!NOTE]
+> For details on how to query these objects using JPQL, see [SPRING_DATA_JPA.md](https://github.com/nitin-is-me/TeamVault/tree/master/docs/SPRING_DATA_JPA.md).
 
 # What Problem Is Hibernate Solving?
 

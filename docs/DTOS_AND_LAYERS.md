@@ -377,11 +377,13 @@ service.authenticate(request)
 
 Step 5
 
-Service authenticates user:
+Service handles the business logic (Authentication and JWT generation):
 
 ```java
 authenticationManager.authenticate(...)
 ```
+> [!NOTE]
+> For details on how the AuthenticationManager works, see [SPRING_SECURITY.md](https://github.com/nitin-is-me/TeamVault/tree/master/docs/SPRING_SECURITY.md).
 
 Step 6
 
@@ -398,6 +400,8 @@ JWT token generated:
 ```java
 jwtService.generateToken(...)
 ```
+> [!NOTE]
+> For details on how JWT tokens work, see [JWT_EXPLAINED.md](https://github.com/nitin-is-me/TeamVault/tree/master/docs/JWT_EXPLAINED.md).
 
 Step 8
 

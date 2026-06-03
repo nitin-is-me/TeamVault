@@ -290,6 +290,9 @@ Dockerfile is NOT the application.
 
 Dockerfile is the RECIPE.
 
+> [!NOTE]
+> For a line-by-line breakdown of exactly what the TeamVault `Dockerfile` does, read [DOCKERFILE.md](https://github.com/nitin-is-me/TeamVault/tree/master/docs/DOCKERFILE.md).
+
 Think:
 
 ```text
@@ -487,6 +490,9 @@ Automatically.
 # What Is GitHub Actions?
 
 GitHub Actions is GitHub's automation system.
+
+> [!NOTE]
+> For a line-by-line breakdown of exactly what the TeamVault `docker.yml` workflow does, read [DOCKERFILE.md](https://github.com/nitin-is-me/TeamVault/tree/master/docs/DOCKERFILE.md).
 
 Example:
 
