@@ -41,6 +41,12 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getProjectById(id, currentUser));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+        projectService.deleteProject(id, currentUser);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{projectId}/members")
     public ResponseEntity<MemberResponse> addMember(
             @PathVariable Long projectId,

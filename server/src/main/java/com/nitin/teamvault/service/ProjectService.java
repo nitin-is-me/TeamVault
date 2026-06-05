@@ -12,6 +12,7 @@ import com.nitin.teamvault.repository.ProjectRepository;
 import com.nitin.teamvault.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,22 @@ public class ProjectService {
     public ProjectResponse getProjectById(Long id, User currentUser) {
         Project project = getProjectIfAccessible(id, currentUser);
         return mapToResponse(project, currentUser);
+    }
+
+    @Transactional
+    public void deleteProject(Long id, User currentUser) {
+        Project project = getProjectIfAccessible(id, currentUser);
+
+        // Only the creator (OWNER) can delete the project
+        if (!project.getCreatedBy().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Only the project owner can delete this project");
+        }
+
+        // Delete all members mapping first to avoid foreign key constraints
+        projectMemberRepository.deleteByProjectId(id);
+
+        // Delete project (cascade will handle articles)
+        projectRepository.delete(project);
     }
 
     // --- Membership Management ---
