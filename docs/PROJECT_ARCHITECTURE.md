@@ -16,6 +16,7 @@ This document serves as a high-level system design overview of TeamVault. It doc
 - **Stateless Authentication:** Secure JWT-based login and registration.
 - **Project Workspaces:** Isolated project environments for documentation.
 - **Markdown Articles:** Live-preview markdown editor for writing technical docs.
+- **Article Version History & Rollback:** Immutable revision snapshots on edit, visual green/red line diffing, and 1-click rollback protected by RBAC.
 - **Role-Based Access Control (RBAC):** Granular permissions (`OWNER`, `EDITOR`, `VIEWER`) to securely share projects via email invitations.
 - **Unified Omnibar:** Global and project-scoped search functionality (`⌘K`).
 
@@ -80,6 +81,7 @@ The relational database is normalized and relies heavily on Foreign Keys.
 - **`users`**: Stores authentication details (email, bcrypt password hash).
 - **`projects`**: Stores the high-level project workspaces.
 - **`articles`**: Stores the markdown documentation. Belongs to a single Project.
+- **`article_versions`**: Stores immutable checkpoints for article edits (version number, title, content, author, timestamp). Cascaded on article deletion.
 - **`project_members`**: The crucial mapping table enabling RBAC. Links Users to Projects with a specific Role.
 
 ---

@@ -364,3 +364,33 @@ into a Project object for me.
 ```
 
 That single realization explains most of JPA.
+
+---
+
+# Real-World Example: Article and ArticleVersion (Parent-Child Cascade)
+
+When we added Article Version History, we needed to link each revision snapshot to its parent article:
+- **`Article`**: The main live document.
+- **`ArticleVersion`**: A historical snapshot of each edit (`v1, v2, v3...`).
+
+### 1. Database Perspective
+- The `article_versions` table holds `article_id (FK)` pointing to `articles(id)`.
+- **Many** version rows point to **One** article row.
+
+### 2. In `ArticleVersion.java` (The Child / Owner of FK)
+```java
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "article_id", nullable = false)
+private Article article;
+```
+
+### 3. In `Article.java` (The Parent)
+```java
+@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<ArticleVersion> versions = new ArrayList<>();
+```
+
+### Why `cascade = CascadeType.ALL, orphanRemoval = true`?
+If a project owner deletes an `Article`, relational databases would reject the query with a Foreign Key constraint error if child rows in `article_versions` still pointed to it. 
+
+With `CascadeType.ALL` and `orphanRemoval = true`, Hibernate automatically deletes all associated historical versions in `article_versions` when the parent `Article` is deleted. Zero manual cleanup queries required!

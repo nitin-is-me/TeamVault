@@ -24,7 +24,7 @@ export default function Home() {
       <main className="z-10 flex flex-col items-center text-center px-6 max-w-4xl">
         <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-indigo-300 backdrop-blur-md mb-8">
           <span className="flex h-2 w-2 rounded-full bg-indigo-500 mr-2 animate-pulse"></span>
-          TeamVault v1.1 is here
+          TeamVault v1.2 is here
         </div>
 
         <h1 className="mb-6 text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">

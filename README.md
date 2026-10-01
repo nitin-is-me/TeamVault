@@ -24,6 +24,9 @@ You can create separate projects (like "Backend Refactor" or "Frontend Configs")
 ### Write documentation without hassle
 You can write knowledge articles inside your projects. The coolest part? It supports full Markdown with preview! So you can write bold text, headings, lists, and even code blocks to make your docs look professional and actually readable. Plus, you can easily edit articles later if you make a typo.
 
+### Article Version History & Visual Diffs
+Never worry about losing past edits or accidental overwrites. Every time an article is updated, TeamVault automatically snapshots an immutable revision checkpoint. You can open the version timeline, inspect visual green (`+`) / red (`-`) line-by-line diffs against current or previous versions, preview historical snapshots in Markdown, and restore an older version with a single click (secured by RBAC).
+
 ### Team Collaboration & RBAC
 The biggest update! You can now invite team members to your projects using just their email address. It has Role Based Access Control (RBAC) implemented, which means you can decide if the invited user can edit the project articles or not. Only the project owner can invite other users to the project. Your dashboard automatically shows projects you created alongside projects you were invited to.
 
@@ -50,6 +53,7 @@ I wanted this project to reflect modern industry standards, so the deployment pi
 |---------|------------|-----------------|
 |1.0      | **01-Jun-2026** | First push. The project acts like a clean personal documentation saver. Basic features like authentication (JWT), project creation, and markdown article writing are added. |
 |1.1      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality, markdown preview and a unified omnibar to search globally across all your projects. |
+|1.2      | **01-Oct-2026** | Article Version History & Rollback: Automatic revision checkpoints on article edits, green/red line-by-line visual diff viewer (powered by `diff`), historical Markdown previews, and one-click restore functionality with RBAC protection. |
 
 --------------
 ### Contribute to the project

@@ -2,6 +2,7 @@ package com.nitin.teamvault.controller;
 
 import com.nitin.teamvault.dto.ArticleRequest;
 import com.nitin.teamvault.dto.ArticleResponse;
+import com.nitin.teamvault.dto.ArticleVersionResponse;
 import com.nitin.teamvault.entity.User;
 import com.nitin.teamvault.service.ArticleService;
 import jakarta.validation.Valid;
@@ -66,5 +67,34 @@ public class ArticleController {
     ) {
         articleService.deleteArticle(id, currentUser);
         return ResponseEntity.noContent().build();
+    }
+
+    // Get version history list of an article
+    @GetMapping("/articles/{id}/versions")
+    public ResponseEntity<List<ArticleVersionResponse>> getArticleVersions(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(articleService.getArticleVersions(id, currentUser));
+    }
+
+    // Get a specific version of an article
+    @GetMapping("/articles/{id}/versions/{versionNumber}")
+    public ResponseEntity<ArticleVersionResponse> getArticleVersion(
+            @PathVariable Long id,
+            @PathVariable Integer versionNumber,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(articleService.getArticleVersion(id, versionNumber, currentUser));
+    }
+
+    // Restore an article to a specific version
+    @PostMapping("/articles/{id}/versions/{versionNumber}/restore")
+    public ResponseEntity<ArticleResponse> restoreArticleVersion(
+            @PathVariable Long id,
+            @PathVariable Integer versionNumber,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(articleService.restoreArticleVersion(id, versionNumber, currentUser));
     }
 }
