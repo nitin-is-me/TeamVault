@@ -111,7 +111,7 @@ export default function ArticleViewer() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center bg-slate-950">
         <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-indigo-500"></div>
       </div>
     );
@@ -120,45 +120,48 @@ export default function ArticleViewer() {
   if (!article) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 p-8">
+    <div className="min-h-dvh bg-slate-950 text-slate-200 px-4 py-5 sm:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
-        <header className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <Link href={`/dashboard/projects/${projectId}`} className="text-slate-500 hover:text-indigo-400 transition-colors inline-flex items-center gap-2 text-sm font-medium">
+        <header className="mb-6 sm:mb-8">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 sm:mb-6">
+            <Link href={`/dashboard/projects/${projectId}`} className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-indigo-400 sm:gap-2">
                &larr; Back to Project
             </Link>
-            <div className="flex gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <button 
                 onClick={() => setIsHistoryOpen(true)}
-                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg text-sm font-medium transition-colors border border-slate-700 flex items-center gap-2"
+                aria-label="Version history"
+                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700 hover:text-white sm:h-auto sm:px-4 sm:py-1.5"
                 title="View version history and visual diffs"
               >
                 <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                History
+                <span className="hidden sm:inline">History</span>
               </button>
 
               {project?.currentUserRole !== 'VIEWER' && (
                 <>
                   <button 
                     onClick={toggleEdit}
-                    className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition-colors border border-slate-700 flex items-center gap-2"
+                    aria-label={isEditing ? 'Cancel editing' : 'Edit article'}
+                    className="flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 text-sm font-medium text-white transition-colors hover:bg-slate-700 sm:h-auto sm:px-4 sm:py-1.5"
                   >
                     {isEditing ? 'Cancel Editing' : (
                       <>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                        Edit Article
+                        <span className="hidden sm:inline">Edit Article</span>
                       </>
                     )}
                   </button>
                   {!isEditing && (
                     <button 
                       onClick={handleDeleteArticle}
-                      className="px-4 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 rounded-lg text-sm font-medium transition-colors border border-red-500/20 flex items-center gap-2"
+                      aria-label="Delete article"
+                      className="flex h-10 items-center justify-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 text-sm font-medium text-red-500 transition-colors hover:bg-red-500/20 hover:text-red-400 sm:h-auto sm:px-4 sm:py-1.5"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                      Delete Article
+                      <span className="hidden sm:inline">Delete Article</span>
                     </button>
                   )}
                 </>
@@ -168,8 +171,8 @@ export default function ArticleViewer() {
           
           {!isEditing && (
             <>
-              <h1 className="text-4xl font-extrabold text-white tracking-tight mb-4">{article.title}</h1>
-              <div className="flex items-center gap-4 text-sm text-slate-400 border-b border-slate-800 pb-6">
+              <h1 className="mb-3 break-words text-2xl font-extrabold text-white tracking-tight sm:mb-4 sm:text-3xl md:text-4xl">{article.title}</h1>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-slate-800 pb-5 text-sm text-slate-400 sm:pb-6">
                 <span className="flex items-center gap-1.5">
                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                    {article.authorName}
@@ -185,7 +188,7 @@ export default function ArticleViewer() {
         </header>
 
         {isEditing ? (
-          <div className="bg-slate-900/50 rounded-xl border border-slate-700 p-6 shadow-xl animate-in fade-in slide-in-from-top-4">
+          <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-4 shadow-xl animate-in fade-in slide-in-from-top-4 sm:p-6">
             <form onSubmit={handleEditSubmit} className="space-y-4">
               {error && (
                 <div className="rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">
@@ -198,7 +201,7 @@ export default function ArticleViewer() {
                   id="title"
                   type="text"
                   required
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-lg font-medium text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-base font-medium text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors sm:text-lg"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
                 />
@@ -210,14 +213,14 @@ export default function ArticleViewer() {
                     <button
                       type="button"
                       onClick={() => setActiveTab('write')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'write' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all sm:py-1 ${activeTab === 'write' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
                     >
                       Write
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveTab('preview')}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${activeTab === 'preview' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all sm:py-1 ${activeTab === 'preview' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`}
                     >
                       Preview
                     </button>
@@ -229,7 +232,7 @@ export default function ArticleViewer() {
                     id="content"
                     required
                     rows={15}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono text-sm leading-relaxed"
+                    className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3 text-base text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors font-mono leading-relaxed sm:text-sm"
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                   />
@@ -247,7 +250,7 @@ export default function ArticleViewer() {
                  <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)]"
+                  className="w-full rounded-lg bg-indigo-500 px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 disabled:opacity-50 shadow-[0_0_15px_rgba(99,102,241,0.3)] sm:w-auto"
                  >
                   {isSubmitting ? 'Saving Changes...' : 'Save Changes'}
                  </button>
@@ -255,7 +258,7 @@ export default function ArticleViewer() {
             </form>
           </div>
         ) : (
-          <article className="prose prose-invert prose-indigo max-w-none prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800 p-6 bg-slate-900/30 rounded-xl border border-slate-800 shadow-inner">
+          <article className="prose prose-invert prose-indigo max-w-none prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800 rounded-xl border border-slate-800 bg-slate-900/30 p-4 shadow-inner sm:p-6">
              <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {article.content}
              </ReactMarkdown>

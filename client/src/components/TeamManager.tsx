@@ -72,18 +72,18 @@ export default function TeamManager({ projectId, onClose }: TeamManagerProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-        <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
-          <h2 className="text-xl font-bold text-white">Manage Team</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm sm:p-4">
+      <div className="flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 shadow-2xl">
+        <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/50 p-4 sm:p-6">
+          <h2 className="text-lg font-bold text-white sm:text-xl">Manage Team</h2>
+          <button onClick={onClose} aria-label="Close" className="-mr-1 shrink-0 rounded-lg p-1 text-slate-400 transition-colors hover:text-white">
              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
         
-        <div className="p-6 overflow-y-auto">
+        <div className="overflow-y-auto p-4 sm:p-6">
           {/* Invite Form */}
-          <div className="mb-8 bg-slate-800/50 p-5 rounded-xl border border-slate-700">
+          <div className="mb-6 rounded-xl border border-slate-700 bg-slate-800/50 p-4 sm:mb-8 sm:p-5">
             <h3 className="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Invite Member</h3>
             <form onSubmit={handleInvite} className="flex gap-3 items-start flex-col sm:flex-row">
               <div className="flex-1 w-full">
@@ -91,14 +91,14 @@ export default function TeamManager({ projectId, onClose }: TeamManagerProps) {
                   type="email"
                   required
                   placeholder="name@company.com"
-                  className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+                  className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2.5 text-base text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:py-2 sm:text-sm"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="w-full sm:w-32">
                  <select
-                    className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+                    className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-2.5 text-base text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:py-2 sm:text-sm"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                  >
@@ -109,7 +109,7 @@ export default function TeamManager({ projectId, onClose }: TeamManagerProps) {
               <button
                 type="submit"
                 disabled={isInviting}
-                className="w-full sm:w-auto px-5 py-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-all"
+                className="w-full rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-indigo-600 disabled:opacity-50 sm:w-auto sm:py-2"
               >
                 {isInviting ? 'Adding...' : 'Add'}
               </button>
@@ -128,13 +128,13 @@ export default function TeamManager({ projectId, onClose }: TeamManagerProps) {
             ) : (
               <ul className="space-y-3">
                 {members.map(member => (
-                  <li key={member.id} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 border border-slate-700">
-                    <div>
-                      <p className="text-sm font-medium text-white">{member.name}</p>
-                      <p className="text-xs text-slate-400">{member.email}</p>
+                  <li key={member.id} className="flex items-center justify-between gap-3 rounded-lg border border-slate-700 bg-slate-800/30 p-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{member.name}</p>
+                      <p className="truncate text-xs text-slate-400">{member.email}</p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded font-medium">
+                    <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+                      <span className="rounded bg-slate-700 px-2 py-1 text-xs font-medium text-slate-300">
                         {member.role}
                       </span>
                       <button 

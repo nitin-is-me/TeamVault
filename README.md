@@ -51,9 +51,10 @@ I wanted this project to reflect modern industry standards, so the deployment pi
 ## Version History
 | Version | Date       | Summary         |
 |---------|------------|-----------------|
-|1.0      | **01-Jun-2026** | First push. The project acts like a clean personal documentation saver. Basic features like authentication (JWT), project creation, and markdown article writing are added. |
-|1.1      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality, markdown preview and a unified omnibar to search globally across all your projects. |
-|1.2      | **01-Oct-2026** | Article Version History & Rollback: Automatic revision checkpoints on article edits, green/red line-by-line visual diff viewer (powered by `diff`), historical Markdown previews, and one-click restore functionality with RBAC protection. |
+|1.0.0      | **01-Jun-2026** | First push. The project acts like a clean personal documentation saver. Basic features like authentication (JWT), project creation, and markdown article writing are added. |
+|1.1.0      | **02-Jun-2026** | Big Update: Implemented Project Invitations and Role Based Access Control (RBAC). Now you can add team members to projects and collaborate. Also added article editing functionality, markdown preview and a unified omnibar to search globally across all your projects. |
+|1.2.0      | **01-Oct-2026** | Big Update: Article Version History & Rollback: Automatic revision checkpoints on article edits, green/red line-by-line visual diff viewer (powered by `diff`), historical Markdown previews, and one-click restore functionality with RBAC protection. |
+|1.2.1      | **26-Oct-2026** | Mobile Responsive UI: the whole app now works properly on phones. Compact icon toolbars, full-width actions, swipeable revision timeline with wrapped diffs, and markdown that no longer overflows the screen. |
 
 --------------
 ### Contribute to the project

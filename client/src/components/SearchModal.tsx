@@ -103,9 +103,9 @@ export default function SearchModal() {
   const hasResults = results.projects.length > 0 || results.articles.length > 0;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex justify-center items-start pt-[15vh]">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/60 px-3 pt-[10vh] backdrop-blur-sm sm:px-0 sm:pt-[15vh]">
       <div 
-        className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden"
+        className="w-full max-w-2xl overflow-hidden rounded-xl border border-slate-700 bg-slate-900 shadow-2xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center px-4 py-3 border-b border-slate-800 bg-slate-900/50">
@@ -113,17 +113,17 @@ export default function SearchModal() {
           <input
             ref={inputRef}
             type="text"
-            className="flex-1 bg-transparent text-white text-lg placeholder-slate-500 focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent text-base text-white placeholder-slate-500 focus:outline-none sm:text-lg"
             placeholder="Search projects and articles..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <div className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">ESC</div>
+          <div className="ml-2 hidden shrink-0 rounded bg-slate-800 px-2 py-1 text-xs text-slate-500 sm:block">ESC</div>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto p-2">
+        <div className="max-h-[70dvh] overflow-x-hidden overflow-y-auto p-2 sm:max-h-[60vh]">
           {query.trim().length === 0 ? (
-            <div className="p-8 text-center text-slate-500 text-sm">
+            <div className="p-6 text-center text-sm text-slate-500 sm:p-8">
               Type to start searching globally across all your projects and articles.
             </div>
           ) : loading ? (
@@ -136,19 +136,19 @@ export default function SearchModal() {
               No results found for "{query}".
             </div>
           ) : (
-            <div className="space-y-4 py-2">
+            <div className="min-w-0 space-y-4 py-2">
               {results.projects.length > 0 && (
                 <div>
                   <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Projects</h3>
-                  <div className="space-y-1">
+                  <div className="min-w-0 space-y-1">
                     {results.projects.map(p => (
                       <button
                         key={p.id}
                         onClick={() => navigateToProject(p.id)}
-                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors flex flex-col group"
+                        className="group flex w-full min-w-0 flex-col overflow-hidden rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-800"
                       >
-                        <span className="text-sm font-medium text-slate-200 group-hover:text-indigo-400">{p.name}</span>
-                        <span className="text-xs text-slate-500 truncate">{p.description}</span>
+                        <span className="w-full truncate text-sm font-medium text-slate-200 group-hover:text-indigo-400">{p.name}</span>
+                        <span className="w-full truncate text-xs text-slate-500">{p.description}</span>
                       </button>
                     ))}
                   </div>
@@ -158,14 +158,14 @@ export default function SearchModal() {
               {results.articles.length > 0 && (
                 <div>
                   <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Articles</h3>
-                  <div className="space-y-1">
+                  <div className="min-w-0 space-y-1">
                     {results.articles.map(a => (
                       <button
                         key={a.id}
                         onClick={() => navigateToArticle(a.projectId, a.id)}
-                        className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors flex flex-col group"
+                        className="group flex w-full min-w-0 flex-col overflow-hidden rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-slate-800"
                       >
-                        <span className="text-sm font-medium text-slate-200 group-hover:text-indigo-400">{a.title}</span>
+                        <span className="w-full line-clamp-2 text-sm font-medium text-slate-200 group-hover:text-indigo-400">{a.title}</span>
                         <span className="text-xs text-slate-500">By {a.authorName}</span>
                       </button>
                     ))}

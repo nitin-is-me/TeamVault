@@ -37,12 +37,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4 text-slate-200">
-      <div className="absolute top-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-[120px]"></div>
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-slate-950 px-4 py-10 text-slate-200 sm:p-6">
+      <div className="pointer-events-none absolute top-0 left-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-[90px] sm:h-[500px] sm:w-[500px] sm:blur-[120px]"></div>
       
       <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-xl shadow-2xl">
-        <div className="p-8">
-          <div className="mb-8 text-center">
+        <div className="p-6 sm:p-8">
+          <div className="mb-6 text-center sm:mb-8">
             <Link href="/" className="inline-block mb-4 text-indigo-400 hover:text-indigo-300">
               <span className="flex items-center justify-center gap-2 font-bold text-xl">
                 <div className="h-6 w-6 rounded bg-gradient-to-br from-indigo-500 to-purple-500"></div>
@@ -108,7 +108,7 @@ export default function LoginPage() {
             </button>
           </form>
         </div>
-        <div className="border-t border-slate-800 bg-slate-900/80 px-8 py-4 text-center">
+        <div className="border-t border-slate-800 bg-slate-900/80 px-6 py-4 text-center sm:px-8">
           <p className="text-sm text-slate-400">
             Don't have an account?{' '}
             <Link href="/auth/register" className="font-medium text-indigo-400 hover:text-indigo-300">

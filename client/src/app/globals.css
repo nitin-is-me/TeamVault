@@ -1,2 +1,43 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #020617; /* slate-950, avoids a white flash while routing */
+    overflow-x: clip; /* keeps decorative glows from creating sideways scroll on phones */
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Long code, tables, URLs and media shouldn't push the page sideways on phones */
+.prose {
+  overflow-wrap: break-word;
+}
+
+.prose pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose img,
+.prose video,
+.prose iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose :where(code):not(:where(pre *)) {
+  overflow-wrap: anywhere;
+}

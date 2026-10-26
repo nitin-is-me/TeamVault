@@ -16,49 +16,49 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-slate-950 text-white">
+    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden bg-slate-950 text-white">
       {/* Background gradients */}
-      <div className="absolute top-[-10%] left-[-10%] h-[40%] w-[40%] rounded-full bg-indigo-500/20 blur-[120px]"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] h-[40%] w-[40%] rounded-full bg-purple-500/20 blur-[120px]"></div>
+      <div className="pointer-events-none absolute top-[-10%] left-[-25%] h-[40%] w-[70%] rounded-full bg-indigo-500/20 blur-[100px] sm:left-[-10%] sm:w-[40%] sm:blur-[120px]"></div>
+      <div className="pointer-events-none absolute bottom-[-10%] right-[-25%] h-[40%] w-[70%] rounded-full bg-purple-500/20 blur-[100px] sm:right-[-10%] sm:w-[40%] sm:blur-[120px]"></div>
 
-      <main className="z-10 flex flex-col items-center text-center px-6 max-w-4xl">
-        <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-indigo-300 backdrop-blur-md mb-8">
-          <span className="flex h-2 w-2 rounded-full bg-indigo-500 mr-2 animate-pulse"></span>
-          TeamVault v1.2 is here
+      <main className="z-10 flex w-full max-w-4xl flex-col items-center px-5 py-16 text-center sm:px-6 sm:py-20">
+        <div className="mb-6 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-indigo-300 backdrop-blur-md sm:mb-8 sm:px-4 sm:text-sm">
+          <span className="mr-2 flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>
+          TeamVault v1.2.1 is here
         </div>
 
-        <h1 className="mb-6 text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">
+        <h1 className="mb-4 text-balance text-[2.125rem] leading-[1.1] font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 sm:mb-6 sm:text-5xl md:text-7xl">
           The Knowledge Hub for <br className="hidden md:block" />
           <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Modern Teams</span>
         </h1>
 
-        <p className="mb-10 text-lg md:text-xl text-slate-400 max-w-2xl">
+        <p className="mb-8 max-w-2xl text-base leading-relaxed text-slate-400 sm:mb-10 sm:text-lg md:text-xl">
           Centralize your project documentation, API specs, and team knowledge in one beautifully organized, secure workspace.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center min-h-[48px] items-center">
+        <div className="flex min-h-[48px] w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
           {loading ? (
-            <div className="h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="h-8 w-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin"></div>
           ) : isLoggedIn ? (
-            <Link href="/dashboard" className="inline-flex h-12 items-center justify-center rounded-lg bg-indigo-500 px-8 font-medium text-white transition-all hover:bg-indigo-600 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+            <Link href="/dashboard" className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-indigo-500 px-8 font-medium text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all hover:scale-105 hover:bg-indigo-600 active:scale-95 sm:w-auto">
               Go to Dashboard &rarr;
             </Link>
           ) : (
             <>
-              <Link href="/auth/register" className="inline-flex h-12 items-center justify-center rounded-lg bg-indigo-500 px-8 font-medium text-white transition-all hover:bg-indigo-600 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+              <Link href="/auth/register" className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-indigo-500 px-8 font-medium text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all hover:scale-105 hover:bg-indigo-600 active:scale-95 sm:w-auto">
                 Get Started Free
               </Link>
-              <Link href="/auth/login" className="inline-flex h-12 items-center justify-center rounded-lg border border-slate-700 bg-slate-900/50 backdrop-blur-sm px-8 font-medium text-slate-300 transition-all hover:bg-slate-800 hover:text-white hover:border-slate-600">
+              <Link href="/auth/login" className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-slate-700 bg-slate-900/50 px-8 font-medium text-slate-300 backdrop-blur-sm transition-all hover:border-slate-600 hover:bg-slate-800 hover:text-white sm:w-auto">
                 Sign In
               </Link>
             </>
           )}
         </div>
 
-        <div className="mt-16 flex flex-col items-center gap-3 text-sm text-slate-500">
+        <div className="mt-12 flex flex-col items-center gap-3 text-sm text-slate-500 sm:mt-16">
           <p>
             Made by{' '}
-            <a href="https://github.com/nitin-is-me" target="_blank" className="font-medium text-slate-300 hover:text-indigo-400 transition-colors">
+            <a href="https://github.com/nitin-is-me" target="_blank" className="font-medium text-slate-300 transition-colors hover:text-indigo-400">
               @nitin-is-me
             </a>
           </p>
