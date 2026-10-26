@@ -1,4 +1,4 @@
-<img width="926" height="300" alt="image" src="https://github.com/user-attachments/assets/60a976d7-a007-4c8e-8c19-2a9534c35f63" />
+<img width="1241" height="497" alt="image" src="https://github.com/user-attachments/assets/0da44dae-3a8e-4b58-8e4b-595edfa236bd" />
 
 # TeamVault
 > Live website can be used [here](https://teamvault-web.vercel.app/)
