@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -18,6 +18,6 @@ public class ArticleResponse {
     private Long projectId;
     private Long authorId;
     private String authorName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

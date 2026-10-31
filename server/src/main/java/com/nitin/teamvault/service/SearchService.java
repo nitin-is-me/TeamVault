@@ -9,6 +9,7 @@ import com.nitin.teamvault.entity.User;
 import com.nitin.teamvault.repository.ArticleRepository;
 import com.nitin.teamvault.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SearchService {
+
+    private static final int MAX_RESULTS_PER_TYPE = 50;
 
     private final ProjectRepository projectRepository;
     private final ArticleRepository articleRepository;
@@ -29,8 +32,10 @@ public class SearchService {
                     .build();
         }
 
-        List<Project> projects = projectRepository.searchAccessibleProjects(currentUser, query);
-        List<Article> articles = articleRepository.searchAccessibleArticles(currentUser, query);
+        // Cap result size so a broad query cannot dump every document into one response.
+        PageRequest limit = PageRequest.of(0, MAX_RESULTS_PER_TYPE);
+        List<Project> projects = projectRepository.searchAccessibleProjects(currentUser, query.trim(), limit);
+        List<Article> articles = articleRepository.searchAccessibleArticles(currentUser, query.trim(), limit);
 
         List<ProjectResponse> projectResponses = projects.stream().map(this::mapProject).collect(Collectors.toList());
         List<ArticleResponse> articleResponses = articles.stream().map(this::mapArticle).collect(Collectors.toList());

@@ -19,17 +19,23 @@ export default function LoginPage() {
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      const data = response.data;
-      
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        router.push('/dashboard');
-      } else {
-         // Fallback if structure is different
-         localStorage.setItem('token', data);
-         router.push('/dashboard');
+      const token = response.data?.token;
+
+      if (!token) {
+        throw new Error('The server returned an invalid login response.');
       }
+
+      localStorage.setItem('token', token);
+      router.push('/dashboard');
     } catch (err: any) {
+      const status = err.response?.status;
+      const errorCode = err.response?.data?.errorCode;
+
+      if (status === 403 && errorCode === 'EMAIL_NOT_VERIFIED') {
+        router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
+        return;
+      }
+
       setError(err.response?.data?.message || err.message || 'Failed to login. Please check your credentials.');
     } finally {
       setLoading(false);
@@ -76,12 +82,15 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-sm font-medium text-slate-300" htmlFor="password">Password</label>
-                <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300">Forgot password?</a>
+                <span className="text-xs text-slate-500" title="Password reset is not implemented yet">
+                  Password reset coming soon
+                </span>
               </div>
               <input
                 id="password"
                 type="password"
                 required
+                autoComplete="current-password"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
                 placeholder="••••••••"
                 value={password}

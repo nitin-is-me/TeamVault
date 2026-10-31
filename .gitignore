@@ -1,0 +1,27 @@
+# Build output
+**/target/
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/dist/
+
+# Environment and secrets
+.env
+.env.*
+!**/.env.example
+**/application-dev.properties
+**/application-prod.properties
+**/application-local.properties
+password.txt
+*.pem
+*.p12
+*.jks
+
+# Tooling and OS files
+**/.idea/
+**/.vscode/
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/*.tsbuildinfo

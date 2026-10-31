@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,23 +19,31 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User implements UserDetails {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false, unique = true)
     private String email;
-    
+
     @Column(nullable = false)
     private String passwordHash;
-    
+
     @Column(nullable = false)
     private String name;
-    
+
+    /**
+     * New accounts start unverified. existing rows default to true so
+     * deploying this column does not lock out current users.
+     */
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean emailVerified = false;
+
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     // Spring Security UserDetails Methods
 

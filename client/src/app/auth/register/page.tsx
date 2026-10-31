@@ -20,15 +20,13 @@ export default function RegisterPage() {
 
     try {
       const response = await api.post('/auth/register', { name, email, password });
-      const data = response.data;
-      
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        router.push('/dashboard');
-      } else {
-         localStorage.setItem('token', data);
-         router.push('/dashboard');
+
+      if (!response.data?.requiresEmailVerification) {
+        throw new Error('The server returned an invalid registration response.');
       }
+
+      const registeredEmail = response.data?.email || email;
+      router.push(`/auth/verify?email=${encodeURIComponent(registeredEmail)}`);
     } catch (err: any) {
       setError(err.response?.data?.message || err.message || 'Failed to register. Please check your details.');
     } finally {
@@ -92,8 +90,11 @@ export default function RegisterPage() {
                 id="password"
                 type="password"
                 required
+                minLength={8}
+                maxLength={72}
+                autoComplete="new-password"
                 className="w-full rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors"
-                placeholder="••••••••"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

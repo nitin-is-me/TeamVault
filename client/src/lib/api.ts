@@ -24,3 +24,22 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Centralize session-expiry handling. Only a real 401 logs the user out;
+// a 403 means "you do not have access to this resource" and must not
+// destroy a valid session.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const isAuthPage =
+      typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/');
+
+    if (status === 401 && typeof window !== 'undefined' && !isAuthPage) {
+      localStorage.removeItem('token');
+      window.location.href = '/auth/login';
+    }
+
+    return Promise.reject(error);
+  }
+);

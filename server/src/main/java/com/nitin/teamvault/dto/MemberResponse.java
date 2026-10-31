@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -18,5 +18,5 @@ public class MemberResponse {
     private String name;
     private String email;
     private ProjectRole role;
-    private LocalDateTime joinedAt;
+    private Instant joinedAt;
 }

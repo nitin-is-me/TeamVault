@@ -126,7 +126,20 @@ DB_URL=postgres://...
 DB_USERNAME=postgres
 DB_PASSWORD=super-secret-password
 JWT_SECRET=my-production-secret
+EMAIL_PROVIDER=brevo
+BREVO_API_KEY=xkeysib-...
+EMAIL_FROM=TeamVault <your-verified-sender@example.com>
 ```
+
+Brevo does not require a domain: verify a sender email in the Brevo dashboard
+(Senders → Add a sender → confirm the link), create an API key, and use that
+address in `EMAIL_FROM`. Limits on the free plan are ample for this project
+(about 300 emails/day).
+
+To use Resend instead (requires a verified domain), set
+`EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_...`, and point `EMAIL_FROM` at an
+address on the verified domain. Resend's `onboarding@resend.dev` test sender
+only delivers to the Resend account owner's own email.
 
 When Spring starts:
 

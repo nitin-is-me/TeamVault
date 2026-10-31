@@ -41,6 +41,15 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getProjectById(id, currentUser));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectResponse> updateProject(
+            @PathVariable Long id,
+            @Valid @RequestBody ProjectRequest request,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return ResponseEntity.ok(projectService.updateProject(id, request, currentUser));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
         projectService.deleteProject(id, currentUser);

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -19,5 +19,5 @@ public class ArticleVersionResponse {
     private String content;
     private Long authorId;
     private String authorName;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

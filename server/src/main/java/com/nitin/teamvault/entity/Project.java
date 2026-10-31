@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "projects")
+@Table(
+        name = "projects",
+        indexes = @Index(name = "idx_projects_created_by", columnList = "created_by")
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,5 +41,5 @@ public class Project {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

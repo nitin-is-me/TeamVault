@@ -13,7 +13,7 @@ This document serves as a high-level system design overview of TeamVault. It doc
 ---
 
 ## 2. Core Features
-- **Stateless Authentication:** Secure JWT-based login and registration.
+- **Stateless Authentication:** Secure JWT-based login and registration, with 6-digit email verification codes delivered through Brevo's HTTPS API.
 - **Project Workspaces:** Isolated project environments for documentation.
 - **Markdown Articles:** Live-preview markdown editor for writing technical docs.
 - **Article Version History & Rollback:** Immutable revision snapshots on edit, visual green/red line diffing, and 1-click rollback protected by RBAC.
@@ -26,8 +26,8 @@ This document serves as a high-level system design overview of TeamVault. It doc
 
 I chose a stack that balances rapid development with enterprise-grade scalability and strict typing.
 
-- **Frontend:** Next.js 14 (React), Tailwind CSS, Axios.
-- **Backend:** Java 21, Spring Boot 3, Spring Security, Spring Data JPA.
+- **Frontend:** Next.js 16 (React), Tailwind CSS, Axios.
+- **Backend:** Java 21, Spring Boot 4, Spring Security, Spring Data JPA.
 - **Database:** PostgreSQL (Hosted on Supabase).
 - **Deployment:** Docker, GitHub Actions (CI/CD), Render, Vercel.
 

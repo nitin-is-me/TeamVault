@@ -4,10 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-@Table(name = "article_versions")
+@Table(
+        name = "article_versions",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_article_versions_article_version",
+                columnNames = {"article_id", "version_number"}
+        ),
+        indexes = @Index(name = "idx_article_versions_article_id", columnList = "article_id")
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,5 +45,5 @@ public class ArticleVersion {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 }

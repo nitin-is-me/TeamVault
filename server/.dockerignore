@@ -1,0 +1,9 @@
+target/
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+*.gpg
+src/main/resources/application-dev.properties
+src/test/resources/application-dev.properties
+HELP.md

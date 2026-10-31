@@ -5,10 +5,16 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
-@Table(name = "articles")
+@Table(
+        name = "articles",
+        indexes = {
+                @Index(name = "idx_articles_project_id", columnList = "project_id"),
+                @Index(name = "idx_articles_author_id", columnList = "author_id")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,10 +43,18 @@ public class Article {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
+
+    /**
+     * Optimistic locking. The default value keeps existing rows valid when
+     * Hibernate adds this column to an already-populated database.
+     */
+    @Version
+    @Column(nullable = false, columnDefinition = "bigint default 0")
+    private Long version;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

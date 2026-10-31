@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectDesc, setNewProjectDesc] = useState('');
   const [createError, setCreateError] = useState('');
+  const [fetchError, setFetchError] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -38,12 +39,15 @@ export default function DashboardPage() {
     try {
       const res = await api.get('/projects');
       setProjects(res.data);
+      setFetchError('');
     } catch (error: any) {
       console.error("Failed to fetch projects", error);
-      // If token expired or unauthorized
-      if (error.response?.status === 401 || error.response?.status === 403) {
+      // A 401 means the session expired; the Axios interceptor handles the redirect.
+      if (error.response?.status === 401) {
         localStorage.removeItem('token');
         router.push('/auth/login');
+      } else {
+        setFetchError(error.response?.data?.message || 'Failed to load projects. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -113,6 +117,12 @@ export default function DashboardPage() {
             {isCreating ? 'Cancel' : '+ New Project'}
           </button>
         </div>
+
+        {fetchError && (
+          <div className="mb-6 rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+            {fetchError}
+          </div>
+        )}
 
         {isCreating && (
           <div className="mb-6 rounded-2xl border border-slate-700 bg-slate-900/80 p-5 shadow-xl backdrop-blur-sm sm:mb-8 sm:p-6">

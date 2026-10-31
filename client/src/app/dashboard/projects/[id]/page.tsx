@@ -32,6 +32,7 @@ export default function ProjectWorkspace() {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [accessError, setAccessError] = useState('');
   
   // New Article Form State
   const [isCreating, setIsCreating] = useState(false);
@@ -65,11 +66,13 @@ export default function ProjectWorkspace() {
       setArticles(articlesRes.data);
     } catch (error: any) {
       console.error("Failed to fetch data", error);
-      if (error.response?.status === 401 || error.response?.status === 403) {
+      if (error.response?.status === 401) {
         localStorage.removeItem('token');
         router.push('/auth/login');
       } else if (error.response?.status === 404) {
         router.push('/dashboard');
+      } else {
+        setAccessError(error.response?.data?.message || 'You do not have access to this project.');
       }
     } finally {
       setLoading(false);
@@ -116,7 +119,25 @@ export default function ProjectWorkspace() {
     );
   }
 
-  if (!project) return null;
+  if (!project) {
+    if (accessError) {
+      return (
+        <div className="flex min-h-dvh items-center justify-center bg-slate-950 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-red-500/20 bg-red-500/5 p-6 text-center">
+            <h1 className="mb-2 text-lg font-semibold text-white">Project unavailable</h1>
+            <p className="mb-6 text-sm text-red-400">{accessError}</p>
+            <Link
+              href="/dashboard"
+              className="inline-flex rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-700"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
 
   return (
     <div className="min-h-dvh bg-slate-950 text-slate-200 px-4 py-5 sm:p-6 lg:p-8">

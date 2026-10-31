@@ -7,6 +7,8 @@ import com.nitin.teamvault.entity.Article;
 import com.nitin.teamvault.entity.ArticleVersion;
 import com.nitin.teamvault.entity.Project;
 import com.nitin.teamvault.entity.User;
+import com.nitin.teamvault.exception.ForbiddenException;
+import com.nitin.teamvault.exception.ResourceNotFoundException;
 import com.nitin.teamvault.repository.ArticleRepository;
 import com.nitin.teamvault.repository.ArticleVersionRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +32,11 @@ public class ArticleService {
         Project project = projectService.getProjectIfAccessible(projectId, currentUser);
         String role = projectService.getRoleForProject(project, currentUser);
         if ("VIEWER".equals(role)) {
-            throw new RuntimeException("You do not have permission to create articles in this project");
+            throw new ForbiddenException("You do not have permission to create articles in this project");
         }
 
         Article article = Article.builder()
-                .title(request.getTitle())
+                .title(request.getTitle().trim())
                 .content(request.getContent())
                 .project(project)
                 .author(currentUser)
@@ -57,28 +59,26 @@ public class ArticleService {
 
     public List<ArticleResponse> getArticlesByProject(Long projectId, User currentUser) {
         projectService.getProjectIfAccessible(projectId, currentUser); // verify access
-        return articleRepository.findByProjectId(projectId).stream()
+        return articleRepository.findByProjectIdOrderByUpdatedAtDesc(projectId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
 
     public ArticleResponse getArticleById(Long id, User currentUser) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+        Article article = getArticleOrThrow(id);
         projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
         return mapToResponse(article);
     }
 
     @Transactional
     public ArticleResponse updateArticle(Long id, ArticleRequest request, User currentUser) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+        Article article = getArticleOrThrow(id);
 
-        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser);
         String role = projectService.getRoleForProject(project, currentUser);
-        
+
         if ("VIEWER".equals(role)) {
-            throw new RuntimeException("You do not have permission to edit articles in this project");
+            throw new ForbiddenException("You do not have permission to edit articles in this project");
         }
 
         // Determine next version number
@@ -100,7 +100,7 @@ public class ArticleService {
             nextVersion = latestOpt.get().getVersionNumber() + 1;
         }
 
-        article.setTitle(request.getTitle());
+        article.setTitle(request.getTitle().trim());
         article.setContent(request.getContent());
         Article updatedArticle = articleRepository.save(article);
 
@@ -108,8 +108,8 @@ public class ArticleService {
         ArticleVersion newVersion = ArticleVersion.builder()
                 .article(updatedArticle)
                 .versionNumber(nextVersion)
-                .title(request.getTitle())
-                .content(request.getContent())
+                .title(updatedArticle.getTitle())
+                .content(updatedArticle.getContent())
                 .author(currentUser)
                 .build();
         articleVersionRepository.save(newVersion);
@@ -119,22 +119,21 @@ public class ArticleService {
 
     @Transactional
     public void deleteArticle(Long id, User currentUser) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+        Article article = getArticleOrThrow(id);
 
-        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser); // verify access
+        Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser);
         String role = projectService.getRoleForProject(project, currentUser);
 
         if ("VIEWER".equals(role)) {
-            throw new RuntimeException("You do not have permission to delete articles in this project");
+            throw new ForbiddenException("You do not have permission to delete articles in this project");
         }
 
         articleRepository.delete(article);
     }
 
+    @Transactional
     public List<ArticleVersionResponse> getArticleVersions(Long articleId, User currentUser) {
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + articleId));
+        Article article = getArticleOrThrow(articleId);
         projectService.getProjectIfAccessible(article.getProject().getId(), currentUser);
 
         List<ArticleVersion> versions = articleVersionRepository.findByArticleIdOrderByVersionNumberDesc(articleId);
@@ -158,30 +157,30 @@ public class ArticleService {
     }
 
     public ArticleVersionResponse getArticleVersion(Long articleId, Integer versionNumber, User currentUser) {
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + articleId));
+        Article article = getArticleOrThrow(articleId);
         projectService.getProjectIfAccessible(article.getProject().getId(), currentUser);
 
         ArticleVersion version = articleVersionRepository.findByArticleIdAndVersionNumber(articleId, versionNumber)
-                .orElseThrow(() -> new RuntimeException("Version " + versionNumber + " not found for article " + articleId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Version " + versionNumber + " not found for article " + articleId));
 
         return mapToVersionResponse(version);
     }
 
     @Transactional
     public ArticleResponse restoreArticleVersion(Long articleId, Integer versionNumber, User currentUser) {
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new RuntimeException("Article not found with id: " + articleId));
+        Article article = getArticleOrThrow(articleId);
 
         Project project = projectService.getProjectIfAccessible(article.getProject().getId(), currentUser);
         String role = projectService.getRoleForProject(project, currentUser);
 
         if ("VIEWER".equals(role)) {
-            throw new RuntimeException("You do not have permission to restore versions in this project");
+            throw new ForbiddenException("You do not have permission to restore versions in this project");
         }
 
         ArticleVersion targetVersion = articleVersionRepository.findByArticleIdAndVersionNumber(articleId, versionNumber)
-                .orElseThrow(() -> new RuntimeException("Version " + versionNumber + " not found for article " + articleId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Version " + versionNumber + " not found for article " + articleId));
 
         Optional<ArticleVersion> latestOpt = articleVersionRepository.findTopByArticleIdOrderByVersionNumberDesc(article.getId());
         int nextVersion = latestOpt.map(v -> v.getVersionNumber() + 1).orElse(1);
@@ -201,6 +200,11 @@ public class ArticleService {
         articleVersionRepository.save(restorationSnapshot);
 
         return mapToResponse(restoredArticle);
+    }
+
+    private Article getArticleOrThrow(Long id) {
+        return articleRepository.findDetailedById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id: " + id));
     }
 
     private ArticleResponse mapToResponse(Article article) {
